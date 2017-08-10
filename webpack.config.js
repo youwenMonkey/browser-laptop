@@ -98,17 +98,10 @@ function development () {  // eslint-disable-line
 
 function production () {  // eslint-disable-line
   var prod = config()
-  var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+  const BabiliPlugin = require('babili-webpack-plugin')
   prod.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(true))
   if (env !== 'test') {
-    prod.plugins.push(new UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      mangle: {
-        except: ['module', 'exports', 'require']
-      }
-    }))
+    prod.plugins.push(new BabiliPlugin())
   }
   return prod
 }

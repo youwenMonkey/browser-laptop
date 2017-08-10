@@ -7,6 +7,11 @@
       }
     }]
   ],
+  "env": {
+    "production": {
+      "presets": ["babili"]
+    }
+  },
   "plugins": [
     "transform-react-inline-elements",
     "transform-react-constant-elements"
