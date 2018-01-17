@@ -5,6 +5,8 @@
 const Immutable = require('immutable')
 const urlParse = require('../../app/common/urlParse')
 
+const {setUserPref} = require('./userPrefs')
+
 module.exports.braveryDefaults = (appState, appConfig) => {
   let defaults = {}
   Object.keys(appConfig.resourceNames).forEach((name) => {
@@ -67,6 +69,8 @@ module.exports.activeSettings = (siteSettings, appState, appConfig) => {
       return defaults[name]
     })()
   })
+
+  setUserPref('safebrowsing.enabled', settings['safeBrowsing'] && settings['safeBrowsingAll'])
 
   settings.adControl = (() => {
     if (settings.shieldsUp === false) {
