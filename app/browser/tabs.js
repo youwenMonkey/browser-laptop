@@ -483,6 +483,12 @@ const api = {
         index = newTabValue.get('index')
       }
 
+      const ses = session.fromPartition(newTab.session.partition)
+      let isPrivate
+      if (ses) {
+        isPrivate = ses.isOffTheRecord()
+      }
+
       const frameOpts = {
         location,
         displayURL,
@@ -491,6 +497,7 @@ const api = {
         active: !!newTabValue.get('active'),
         guestInstanceId: newTab.guestInstanceId,
         isPinned: !!newTabValue.get('pinned'),
+        isPrivate,
         openerTabId,
         disposition,
         index,
