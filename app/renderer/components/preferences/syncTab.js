@@ -32,6 +32,8 @@ const {StyleSheet, css} = require('aphrodite/no-important')
 const commonStyles = require('../styles/commonStyles')
 const globalStyles = require('../styles/global')
 
+const removeIcon = require('../../../extensions/brave/img/ledger/icon_remove.svg')
+
 class SyncTab extends ImmutableComponent {
   constructor () {
     super()
@@ -40,6 +42,7 @@ class SyncTab extends ImmutableComponent {
     this.onReset = this.reset.bind(this)
     this.onRestore = this.restoreSyncProfile.bind(this)
     this.enableRestore = this.enableRestore.bind(this)
+    this.onRemove = this.removeSyncDevice.bind(this)
   }
 
   get setupError () {
@@ -147,6 +150,14 @@ class SyncTab extends ImmutableComponent {
       {
         html: new Date(device.get('lastRecordTimestamp')).toLocaleString(),
         value: device.get('lastRecordTimestamp')
+      },
+      {
+        html: <span
+          data-l10n-id='syncRemoveDevice'
+          className={css(styles.actionIcons__icon, styles.actionIcons__icon_remove)}
+          onClick={this.props.showOverlay.bind(this, 'syncRemove')}
+        />,
+        value: ''
       }
     ])
   }
@@ -155,7 +166,7 @@ class SyncTab extends ImmutableComponent {
     return <section className={css(styles.settingsListContainerMargin__top)}>
       <DefaultSectionTitle data-l10n-id='syncDevices' data-test-id='syncDevices' />
       <SortableTable
-        headings={['id', 'syncDeviceName', 'syncDeviceLastActive']}
+        headings={['id', 'syncDeviceName', 'syncDeviceLastActive', 'remove']}
         defaultHeading='syncDeviceLastActive'
         defaultHeadingSortOrder='desc'
         rows={this.devicesTableRows}
@@ -372,7 +383,46 @@ class SyncTab extends ImmutableComponent {
       <BrowserButton groupedItem primaryColor
         l10nId='syncReset'
         testId='syncResetButton'
-        onClick={this.onReset}
+        onClick={this.onRemove}
+      />
+    </section>
+  }
+
+  get removeOverlayContent () {
+    // TODO: check if active device is the one used
+    const isActiveDevice = 1 + 1 === 2
+    return (
+      <section>
+        {
+          isActiveDevice
+          ? (
+            <div>
+              <p
+                className={css(styles.syncOverlayBody__paragraph)} data-l10n-id='syncRemoveActiveDeviceWarning1' />
+              <p
+                className={css(styles.syncOverlayBody__paragraph)}
+                data-l10n-id='syncRemoveActiveDeviceWarning2' />
+            </div>
+          )
+          : <p
+            className={css(styles.syncOverlayBody__paragraph)}
+            data-l10n-id='syncRemoveOtherDeviceWarning' />
+        }
+      </section>
+    )
+  }
+
+  get removeOverlayFooter () {
+    return <section>
+      <BrowserButton groupedItem secondaryColor
+        l10nId='cancel'
+        testId='cancelButton'
+        onClick={this.props.hideOverlay.bind(this, 'syncRemove')}
+      />
+      <BrowserButton groupedItem primaryColor
+        l10nId='syncRemove'
+        testId='syncRemoveButton'
+        onClick={this.onRemove}
       />
     </section>
   }
@@ -411,6 +461,10 @@ class SyncTab extends ImmutableComponent {
     if (!isRestoring) {
       aboutActions.reloadSyncExtension()
     }
+  }
+
+  removeSyncDevice () {
+    // this.props.syncData.get('devices')
   }
 
   restoreSyncProfile () {
@@ -477,6 +531,16 @@ class SyncTab extends ImmutableComponent {
           content={this.resetOverlayContent}
           footer={this.resetOverlayFooter}
           onHide={this.props.hideOverlay.bind(this, 'syncReset')} />
+        : null
+      }
+      {
+        this.isSetup && this.props.syncRemoveOverlayVisible
+        ? <ModalOverlay
+          title={'syncRemoveDeviceModal'}
+          titleArgs={{device: getSetting(settings.SYNC_DEVICE_NAME, this.props.settings)}}
+          content={this.removeOverlayContent}
+          footer={this.removeOverlayFooter}
+          onHide={this.props.hideOverlay.bind(this, 'syncRemove')} />
         : null
       }
       <section className={css(styles.settingsListContainerMargin__bottom)}>
@@ -625,11 +689,31 @@ const styles = StyleSheet.create({
     // See: .settingsList .settingItem > *:not(.switchControl)
     marginBottom: `${globalStyles.spacing.modalPanelHeaderMarginBottom} !important`
   },
+
   syncOverlayBody__form: {
     marginBottom: globalStyles.spacing.settingsListContainerMargin
   },
   syncOverlayBody__formBottomMargin: {
     marginBottom: globalStyles.spacing.dialogInsideMargin
+  },
+
+  syncOverlayBody__paragraph: {
+    margin: '20px 0'
+  },
+
+  actionIcons__icon: {
+    backgroundColor: '#c4c5c5',
+    width: '1rem',
+    height: '1rem',
+    display: 'inline-block',
+
+    ':hover': {
+      backgroundColor: globalStyles.color.buttonColor
+    }
+  },
+
+  actionIcons__icon_remove: {
+    '-webkit-mask-image': `url(${removeIcon})`
   }
 })
 

@@ -67,11 +67,13 @@ class ModalOverlay extends ImmutableComponent {
           onClick={this.props.onHide}
         /> : null)
       title = (this.props.title
-        ? <div className={cx({
+        ? (<div className={cx({
           [css(styles.dialog__header__title)]: true,
           [customTitleClassesStr]: true
-        })} data-l10n-id={this.props.title}
-        /> : null)
+        })}
+          data-l10n-id={this.props.title}
+          data-l10n-args={JSON.stringify(this.props.titleArgs)}
+        />) : null)
       subTitle = (this.props.subTitle
         ? <aside className={css(styles.dialog__header__subTitle)}>
           <div className={cx({
