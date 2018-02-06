@@ -94,3 +94,13 @@ module.exports.getActivePasswordManager = (settingsCollection) => {
 
   return Immutable.fromJS(details)
 }
+
+/**
+ * Checks if Tor is available for the Tor settings to work properly.
+ */
+module.exports.getTorAvailable = () => {
+  const appStore = (process.type === 'browser'
+      ? require('./stores/appStore').getState()
+      : require('./stores/appStoreRenderer').state) || Immutable.Map()
+  return appStore.getIn(['about', 'newtab', 'torAvailable'])
+}

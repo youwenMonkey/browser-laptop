@@ -547,6 +547,11 @@ class Frame extends React.Component {
             contextMenus.onMainContextMenu(nodeProps, this.frame, this.tab, contextMenuType)
           }
           break
+        case messages.RECREATE_TOR_TAB:
+          method = (torEnabled) => {
+            console.log('should recreate tor tab', torEnabled)
+          }
+          break
         case messages.STOP_LOAD:
           method = () => this.webview.stop()
           break

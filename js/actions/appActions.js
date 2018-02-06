@@ -1916,9 +1916,10 @@ const appActions = {
     })
   },
 
-  checkTorAvailable: function () {
+  checkTorAvailable: function (cb) {
     dispatch({
-      actionType: appConstants.APP_CHECK_TOR_AVAILABLE
+      actionType: appConstants.APP_CHECK_TOR_AVAILABLE,
+      cb
     })
   },
 

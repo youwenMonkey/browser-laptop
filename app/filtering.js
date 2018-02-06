@@ -643,23 +643,20 @@ function registerForMagnetHandler (session) {
 
 /**
  * Checks that a Tor proxy is available on socks5 port 9050
+ * @param {Function(boolean)} cb - callback with result of tor availability
  */
-module.exports.checkTorAvailable = () => {
+module.exports.checkTorAvailable = (cb) => {
   const ses = registeredSessions['tor-test']
   if (!ses) {
     initPartition('tor-test')
-    module.exports.checkTorAvailable()
+    module.exports.checkTorAvailable(cb)
     return
   }
 
   const proxyConfig = {
     proxyRules: 'socks5://127.0.0.1:9050,direct://'
   }
-  // XXX: due to muon bug, callback is required but doesn't do anything
-  ses.setProxy(proxyConfig, () => {})
-
-  // TODO: remove setTimeout once muon supports setProxy callback
-  setTimeout(() => {
+  ses.setProxy(proxyConfig, () => {
     request('https://check.torproject.org/?TorButton=true', (err, response, body) => {
       let success = null
       if (err) {
@@ -678,8 +675,11 @@ module.exports.checkTorAvailable = () => {
           response.statusCode)
       }
       appActions.torAvailable(success)
+      if (cb) {
+        cb(success)
+      }
     }, ses)
-  }, 500)
+  })
 }
 
 module.exports.setTorNewIdentity = (url, tabId) => {

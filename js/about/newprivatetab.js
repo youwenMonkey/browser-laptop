@@ -29,6 +29,7 @@ class NewPrivateTab extends React.Component {
 
   onChangeTor (e) {
     aboutActions.changeSetting(settings.USE_TOR_PRIVATE_TABS, e.target.value)
+    aboutActions.recreateTorTab(e.target.value)
   }
 
   onClickPrivateSearchTitle () {
@@ -78,21 +79,21 @@ class NewPrivateTab extends React.Component {
           {
             this.props.newTabData.getIn(torAvailable)
               ? <div className={css(styles.privateSearch)}>
-                  <div className={css(styles.privateSearch__setting)}>
-                    <SettingCheckbox
-                      large
-                      switchClassName={css(styles.privateSearch__switch)}
-                      rightLabelClassName={css(styles.sectionTitle)}
-                      checked={Boolean(this.props.newTabData.getIn(torEnabled))}
-                      onChange={this.onChangeTor.bind(this)}
-                    />
-                    <h2 onClick={this.onClickTorTitle.bind(this)} className={css(styles.privateSearch__title)}>
-                      <span className={css(styles.text_sectionTitle)} data-l10n-id='privateTabTorTitle' />
-                    </h2>
-                    <img className={css(styles.privateSearch__ddgImage)} src={torIcon} alt='Tor logo' />
-                  </div>
-                  <p className={css(styles.text, styles.text_privateSearch)} data-l10n-id='privateTabTorText1' />
+                <div className={css(styles.privateSearch__setting)}>
+                  <SettingCheckbox
+                    large
+                    switchClassName={css(styles.privateSearch__switch)}
+                    rightLabelClassName={css(styles.sectionTitle)}
+                    checked={Boolean(this.props.newTabData.getIn(torEnabled))}
+                    onChange={this.onChangeTor.bind(this)}
+                  />
+                  <h2 onClick={this.onClickTorTitle.bind(this)} className={css(styles.privateSearch__title)}>
+                    <span className={css(styles.text_sectionTitle)} data-l10n-id='privateTabTorTitle' />
+                  </h2>
+                  <img className={css(styles.privateSearch__ddgImage)} src={torIcon} alt='Tor logo' />
                 </div>
+                <p className={css(styles.text, styles.text_privateSearch)} data-l10n-id='privateTabTorText1' />
+              </div>
               : null
           }
         </div>
