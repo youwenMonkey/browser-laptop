@@ -6,6 +6,7 @@
 
 const appConfig = require('../../../js/constants/appConfig')
 const appConstants = require('../../../js/constants/appConstants')
+const appActions = require('../../../js/actions/appActions')
 const tabs = require('../tabs')
 const windows = require('../windows')
 const {getWebContents} = require('../webContentsCache')
@@ -139,6 +140,19 @@ const tabsReducer = (state, action, immutableAction) => {
         }
       })
       break
+    case appConstants.APP_RECREATE_TOR_TAB:
+      {
+        const tabId = action.get('tabId')
+        tabs.create({
+          url: 'about:newtab',
+          isPrivate: true,
+          windowId: tabState.getWindowId(state, tabId),
+          isTor: action.get('torEnabled')
+        }, (tab) => {
+          appActions.tabCloseRequested(tabId)
+        })
+        break
+      }
     case appConstants.APP_TAB_UPDATED:
       state = tabState.maybeCreateTab(state, action)
       // tabs.debugTabs(state)

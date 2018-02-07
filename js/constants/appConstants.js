@@ -195,7 +195,8 @@ const appConstants = {
   APP_ON_LEDGER_MEDIA_PUBLISHER: _,
   APP_CHECK_TOR_AVAILABLE: _,
   APP_TOR_AVAILABLE: _,
-  APP_SET_TOR_NEW_IDENTITY: _
+  APP_SET_TOR_NEW_IDENTITY: _,
+  APP_RECREATE_TOR_TAB: _
 }
 
 module.exports = mapValuesByKeys(appConstants)

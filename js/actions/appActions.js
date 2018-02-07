@@ -1934,6 +1934,14 @@ const appActions = {
     dispatch({
       actionType: appConstants.APP_SET_TOR_NEW_IDENTITY
     })
+  },
+
+  recreateTorTab: function (torEnabled, tabId) {
+    dispatch({
+      actionType: appConstants.APP_RECREATE_TOR_TAB,
+      torEnabled,
+      tabId
+    })
   }
 }
 
