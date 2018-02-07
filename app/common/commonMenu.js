@@ -9,7 +9,7 @@ const messages = require('../../js/constants/messages')
 const locale = require('../../js/l10n')
 const settings = require('../../js/constants/settings')
 const {tabs} = require('../../js/constants/config')
-const {getSetting, getTorAvailable} = require('../../js/settings')
+const {getSetting} = require('../../js/settings')
 const communityURL = 'https://community.brave.com/'
 const isDarwin = process.platform === 'darwin'
 const electron = require('electron')
@@ -106,7 +106,6 @@ module.exports.newPrivateTabMenuItem = () => {
 module.exports.newTorIdentityMenuItem = () => {
   return {
     label: locale.translation('newTorIdentity'),
-    enabled: getSetting(settings.USE_TOR_PRIVATE_TABS) && getTorAvailable(),
     click: function (item, focusedWindow) {
       appActions.setTorNewIdentity()
     }
