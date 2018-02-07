@@ -262,10 +262,7 @@ class NewTabPage extends React.Component {
     }
 
     // TODO: use this.props.isIncognito when muon supports it for tor tabs
-    if (this.props.isIncognito || (
-      this.state.newTabData.getIn(['newTabDetail', 'torAvailable']) &&
-      this.state.newTabData.getIn(['newTabDetail', 'torEnabled'])
-    )) {
+    if (this.props.isIncognito) {
       return <NewPrivateTab newTabData={this.state.newTabData} />
     }
 
