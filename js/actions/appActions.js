@@ -1936,11 +1936,12 @@ const appActions = {
     })
   },
 
-  recreateTorTab: function (torEnabled, tabId) {
+  recreateTorTab: function (torEnabled, tabId, index) {
     dispatch({
       actionType: appConstants.APP_RECREATE_TOR_TAB,
       torEnabled,
-      tabId
+      tabId,
+      index
     })
   }
 }

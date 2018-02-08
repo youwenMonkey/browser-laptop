@@ -147,6 +147,8 @@ const tabsReducer = (state, action, immutableAction) => {
           url: 'about:newtab',
           isPrivate: true,
           windowId: tabState.getWindowId(state, tabId),
+          index: action.get('index'),
+          active: true,
           isTor: action.get('torEnabled')
         }, (tab) => {
           appActions.tabCloseRequested(tabId)

@@ -549,7 +549,8 @@ class Frame extends React.Component {
           break
         case messages.RECREATE_TOR_TAB:
           method = (torEnabled) => {
-            appActions.recreateTorTab(torEnabled, this.props.tabId)
+            appActions.recreateTorTab(torEnabled, this.props.tabId,
+              this.tab ? this.tab.get('index') : undefined)
           }
           break
         case messages.STOP_LOAD:
