@@ -21,6 +21,7 @@ const BrowserButton = require('../../app/renderer/components/common/browserButto
 // Tabs
 const PaymentsTab = require('../../app/renderer/components/preferences/paymentsTab')
 const TabsTab = require('../../app/renderer/components/preferences/tabsTab')
+const DemoTab = require('../../app/renderer/components/preferences/demoTab')
 const SyncTab = require('../../app/renderer/components/preferences/syncTab')
 const PluginsTab = require('../../app/renderer/components/preferences/pluginsTab')
 const ExtensionsTab = require('../../app/renderer/components/preferences/extensionsTab')
@@ -702,7 +703,8 @@ class AboutPreferences extends React.Component {
       ledgerData: Immutable.Map(),
       syncData: Immutable.Map(),
       firstRecoveryKey: '',
-      secondRecoveryKey: ''
+      secondRecoveryKey: '',
+      demoValue: []
     }
 
     // Similar to tabFromCurrentHash, this allows to set
@@ -733,6 +735,9 @@ class AboutPreferences extends React.Component {
     })
     ipc.on(messages.LANGUAGE, (e, {langCode, languageCodes}) => {
       this.setState({ languageCodes })
+    })
+    ipc.on(messages.DEMO_UPDATED, (e, demoValue) => {
+      this.setState(demoValue || {})
     })
     ipc.send(messages.REQUEST_LANGUAGE)
     this.onChangeSetting = this.onChangeSetting.bind(this)
@@ -886,6 +891,8 @@ class AboutPreferences extends React.Component {
     const ledgerData = this.state.ledgerData
     const syncData = this.state.syncData
     const extensions = this.state.extensions
+    const demoValue = this.state.demoValue
+
     switch (this.state.preferenceTab) {
       case preferenceTabs.GENERAL:
         tab = <GeneralTab settings={settings} onChangeSetting={this.onChangeSetting} languageCodes={languageCodes} />
@@ -967,6 +974,9 @@ class AboutPreferences extends React.Component {
           settings={settings}
           languageCodes={languageCodes}
           onChangeSetting={this.onChangeSetting} />
+        break
+      case preferenceTabs.DEMO:
+        tab = <DemoTab demoValue={demoValue} />
         break
     }
     return <div>
